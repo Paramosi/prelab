@@ -7,7 +7,7 @@ import io
 import json
 from pathlib import Path
 from zipfile import ZipFile, ZIP_DEFLATED
-
+    
 import numpy as np
 
 from domain import Catalog, Material, Point, Provenance, ValidationError, MODEL_VERSION, validate_material
