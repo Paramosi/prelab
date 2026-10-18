@@ -1,0 +1,14 @@
+[project]
+name = "tensile-lab"
+version = "1.0.0"
+description = "Lecture-sourced tensile-test visualization and engineering stress-strain comparison"
+requires-python = ">=3.12"
+dependencies = ["numpy==2.5.4", "scipy==1.18.1", "streamlit==1.66.0", "plotly==6.9.0"]
+
+[project.optional-dependencies]
+test = ["pytest==9.1.1"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+

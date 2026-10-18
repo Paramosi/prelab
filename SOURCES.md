@@ -1,0 +1,30 @@
+# Sources and evidence boundaries
+
+Implementation and documentation are in English. This registry supplements the per-field records in `data/provenance.csv`. Local course material was read directly; software and general mechanics references below were checked during planning/implementation on 2026-10-18. Formulas or parameters labeled **project assumption** are not attributed to a source that does not supply them.
+
+## Course sources
+
+1. **Yonsei University, Mechanical Engineering Experiment Class – Mechanics of Materials**, instructor Seok Kim (김석), lecture PDF supplied by the user: [local lecture](<../고체 Module#1 이론.pdf>). PDF page 8 / printed slide 8, “Mechanical Properties”: the embedded SI table provides the transcribed E, tensile yield/UTS, and elongation for all eight real material-condition rows. The slide credits Ferdinand P. Beer, *Mechanics of Materials*, 5th edition, Appendix B. This implementation cites the reproduced table; it does not claim independent access to the textbook or its exact page numbers.
+2. The same lecture: PDF p.13 / slide 13 explains the offset method with a generic aluminum example; PDF p.18 / slide 20 explains necking; PDF pp.21–22 / slides 24–25 discuss elongation and tensile properties. Page and slide numbers differ in the latter part of the PDF. The generic 352 MPa illustration on p.13 is not the 2024-T4 table value.
+3. The same lecture: PDF p.30 / slide 33, Q2–Q4 specifies comparison tasks and Q3 multipliers. The local [2026-2 prelab report template](<고체 Module #1 Pre-lab report format.docx>), tables labeled Q2, Q3, Q4, confirms the five material names, classification used in the assignment, and the 50%/30% modification. The report template is a task source, not a numeric property source.
+4. User requirements in this conversation: maintain CSV datasets by property set/condition; let the user select materials; show specimen behavior before the selected comparison curves; implement the program in English; give clear sources. These are product requirements, not scientific evidence.
+
+## Mechanics and numerical references
+
+- David Roylance, MIT, *Stress-Strain Curves*, 2001-08-23, [official PDF](https://ocw.mit.edu/courses/3-11-mechanics-of-materials-fall-1999/d4ea545640f151bb66e6d8bc0ba55ed4_MIT3_11F99_ss.pdf). Printed p.1 engineering definitions; p.2 Hooke law; p.3 offset yield and UTS; pp.3–4 necking; p.6 limitations on true/engineering conversions. General definitions only, not the nine datasets' numeric source.
+- Ramberg and Osgood, *Description of Stress-Strain Curves by Three Parameters*, NACA TN 902, 1943, [NASA](https://ntrs.nasa.gov/archive/nasa/casi.ntrs.nasa.gov/19930081614.pdf). General elastic-plus-power-law construction. The offset-normalized form in `models.py` is specified explicitly in the README; the exponents 6/4 are project assumptions, not fitted coefficients from the paper.
+- MIT 3.063, *Polymer Physics*, Spring 2007, Lecture 18, *Mechanical Properties: Large Strain Behavior*, [official PDF](https://ocw.mit.edu/courses/3-063-polymer-physics-spring-2007/13064db4096d0f658c2b3e6ce28c9d8c_lec18_07.pdf), PDF pp.1–6. Supports distinguishing deformation modes and avoiding universal incompressibility claims for polymers. It does not supply the implemented PC drawing points.
+- Instron, *AutoX750: Should the AutoX Remain on the Specimen Through Failure?*, 2015, [technical note](https://www.instron.com/en/resources/literature/autox-specimen-failure/), p.1. Total extension at fracture and elongation after fracture differ. The program explicitly treats the lecture percentage as its illustrative endpoint without claiming an experimentally correct recovery correction.
+- SciPy, [PchipInterpolator](https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.PchipInterpolator.html), [CubicHermiteSpline](https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.CubicHermiteSpline.html), and [brentq](https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.brentq.html). API and numerical-method references. Local polynomial constraint checks and the 56-step prefix inversion are project implementation choices.
+
+## Software references
+
+- [Python csv](https://docs.python.org/3/library/csv.html): CSV I/O. Application-specific schemas and semantic validation are implemented here.
+- [NumPy broadcasting](https://numpy.org/doc/stable/user/basics.broadcasting.html): vectorized operations. Reported complexity in the README is an analysis of this code, not a benchmark from NumPy.
+- Streamlit [multiselect](https://docs.streamlit.io/develop/api-reference/widgets/st.multiselect), [Session State](https://docs.streamlit.io/develop/api-reference/caching-and-state/st.session_state), [fragment](https://docs.streamlit.io/develop/api-reference/execution-flow/st.fragment), [image](https://docs.streamlit.io/develop/api-reference/media/st.image), [Plotly chart](https://docs.streamlit.io/develop/api-reference/charts/st.plotly_chart), [AppTest](https://docs.streamlit.io/develop/api-reference/app-testing), [run](https://docs.streamlit.io/develop/api-reference/cli/run): UI/state/timer/SVG/chart/test/launch capabilities.
+- [Plotly configuration](https://plotly.com/python/configuration-options/): browser PNG export through `toImageButtonOptions`. Server-side Kaleido is not required for this path.
+- [Pytest parametrization](https://docs.pytest.org/en/stable/how-to/parametrize.html): repeated test cases.
+
+## Project assumptions and limitations
+
+All tail points, tail/fracture shape ratios, prefix exponents, fracture-endpoint interpretation, display geometry, display timing, and the Q3 policy of keeping nonmodified quantities fixed are explicitly identified in `README.md` and `data/provenance.csv`. They were selected to make a reproducible educational comparison while preserving the source property constraints; they are not lecture-provided measurements. No actual experimental full curve or neck profile was supplied. The input table's degree of rounding is not a measure of simulation prediction accuracy.
